@@ -1,0 +1,9 @@
+@use '../styles/settings/helpers/' as *;
+
+.todosApp {
+	@include section;
+
+	&__container {
+		@include container-narrow;
+	}
+}

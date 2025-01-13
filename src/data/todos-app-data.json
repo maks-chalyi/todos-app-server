@@ -1,0 +1,14 @@
+{
+  "todos-app-data": [
+    {
+      "title": "Краснодар",
+      "completed": false,
+      "id": 1
+    },
+    {
+      "title": "Анапа",
+      "completed": false,
+      "id": 2
+    }
+  ]
+}
