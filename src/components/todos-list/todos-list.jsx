@@ -1,5 +1,4 @@
 import styles from './todos-list.module.scss'
-import { useState, useEffect } from 'react'
 import { Todo } from '../todo/todo'
 
 export const TodosList = ({ todos, refreshTodos }) => {

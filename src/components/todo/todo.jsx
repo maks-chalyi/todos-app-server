@@ -1,69 +1,30 @@
 import styles from './todo.module.scss'
-import { useState } from 'react'
 import { Input } from '../../basic-components/input/input'
 import { Button } from '../../basic-components/button/button'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { CiSaveDown2 } from 'react-icons/ci'
+import {
+	useRequestDeleteTodo,
+	useRequestUpdateTodo,
+	useRequestUpdateCompletedTodo,
+} from '../hooks'
 
 export const Todo = ({ id, title, completed, refreshTodos }) => {
-	const [modifiedFieldInputValue, setModifiedFieldInputValue] =
-		useState(title)
-	const [isEditingFlag, setIsEditingFlag] = useState(false)
-
 	const clickedForRenameTodoTitle = () => {
 		setIsEditingFlag(true)
 	}
 
-	const saveRenamedTodoTitle = (id) => {
-		fetch(`http://localhost:3000/todos-app-data/${id}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: modifiedFieldInputValue,
-				completed: false,
-			}),
-		})
-			.then((responseData) => responseData.json())
-			.then((loadedTodos) => {
-				console.log('Задача ИЗМЕНЕНА, ответ сервера', loadedTodos)
-				refreshTodos()
-				setIsEditingFlag(false)
-			})
-	}
+	const {
+		saveRenamedTodoTitle,
+		modifiedFieldInputValue,
+		setModifiedFieldInputValue,
+		isEditingFlag,
+		setIsEditingFlag,
+	} = useRequestUpdateTodo(refreshTodos, title)
 
-	const deleteTodo = (id) => {
-		fetch(`http://localhost:3000/todos-app-data/${id}`, {
-			method: 'DELETE',
-		})
-		console.log('Задача УДАЛЕНА, ответ сервера')
-		refreshTodos()
-	}
+	const deleteTodo = useRequestDeleteTodo(refreshTodos)
 
-	const changeTodoStatus = (id, completed) => {
-		fetch(`http://localhost:3000/todos-app-data/${id}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title: title,
-				completed: !completed,
-			}),
-		})
-			.then((responseData) => responseData.json())
-			.then((loadedTodos) => {
-				if (!completed) {
-					console.log(
-						'Задача изменена на ВЫПОЛНЕНА, ответ сервера',
-						loadedTodos,
-					)
-				} else {
-					console.log(
-						'Задача изменена на НЕ ВЫПОЛНЕНА, ответ сервера',
-						loadedTodos,
-					)
-				}
-				refreshTodos()
-			})
-	}
+	const changeTodoStatus = useRequestUpdateCompletedTodo(refreshTodos, title)
 
 	return (
 		<>
